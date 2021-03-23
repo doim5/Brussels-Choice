@@ -9,7 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BrusselsChoice">
-        <activity android:name=".MainActivity">
+        <activity android:name=".TheGoodThings"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FromTo"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DownToOne"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Credits"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

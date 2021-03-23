@@ -7,129 +7,6 @@
     tools:context=".MainActivity">
 
     <HorizontalScrollView
-        android:id="@+id/scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/pages"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/page1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/playbtn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Play"
-                        android:textSize="25sp"
-                        app:layout_constraintBottom_toTopOf="@+id/tutorialbtn"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/tutorialbtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Tutorials"
-                        android:textSize="25sp"
-                        app:layout_constraintBottom_toTopOf="@+id/creditbtn"
-                        app:layout_constraintEnd_toEndOf="@+id/playbtn"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="@+id/playbtn"
-                        app:layout_constraintTop_toBottomOf="@+id/playbtn" />
-
-                    <Button
-                        android:id="@+id/creditbtn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Credits"
-                        android:textSize="25sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/tutorialbtn"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="@+id/tutorialbtn"
-                        app:layout_constraintTop_toBottomOf="@+id/tutorialbtn" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/page2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/dtobtn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Down To One"
-                        android:textSize="23sp"
-                        app:layout_constraintBottom_toTopOf="@+id/ftbtn"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/ftbtn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="From X To Y"
-                        android:textSize="23sp"
-                        app:layout_constraintBottom_toTopOf="@+id/atgtbtn"
-                        app:layout_constraintEnd_toEndOf="@+id/dtobtn"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="@+id/dtobtn"
-                        app:layout_constraintTop_toBottomOf="@+id/dtobtn" />
-
-                    <Button
-                        android:id="@+id/atgtbtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="The Good Things"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/ftbtn"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="@+id/ftbtn"
-                        app:layout_constraintTop_toBottomOf="@+id/ftbtn" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <HorizontalScrollView
         android:id="@+id/bglevel1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -521,6 +398,129 @@
                 app:layout_constraintTop_toBottomOf="@+id/zahl18" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/pages"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/page1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/playbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Play"
+                        android:textSize="25sp"
+                        app:layout_constraintBottom_toTopOf="@+id/tutorialbtn"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/tutorialbtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Tutorials"
+                        android:textSize="25sp"
+                        app:layout_constraintBottom_toTopOf="@+id/creditbtn"
+                        app:layout_constraintEnd_toEndOf="@+id/playbtn"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/playbtn"
+                        app:layout_constraintTop_toBottomOf="@+id/playbtn" />
+
+                    <Button
+                        android:id="@+id/creditbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Credits"
+                        android:textSize="25sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/tutorialbtn"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/tutorialbtn"
+                        app:layout_constraintTop_toBottomOf="@+id/tutorialbtn" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/page2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/dtobtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Down To One"
+                        android:textSize="23sp"
+                        app:layout_constraintBottom_toTopOf="@+id/ftbtn"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/ftbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="From X To Y"
+                        android:textSize="23sp"
+                        app:layout_constraintBottom_toTopOf="@+id/atgtbtn"
+                        app:layout_constraintEnd_toEndOf="@+id/dtobtn"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/dtobtn"
+                        app:layout_constraintTop_toBottomOf="@+id/dtobtn" />
+
+                    <Button
+                        android:id="@+id/atgtbtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="The Good Things"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/ftbtn"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/ftbtn"
+                        app:layout_constraintTop_toBottomOf="@+id/ftbtn" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </LinearLayout>
     </HorizontalScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

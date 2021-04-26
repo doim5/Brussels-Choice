@@ -38,7 +38,7 @@
         android:layout_marginBottom="16dp"
         android:text="/3"
         android:textAllCaps="false"
-        android:textSize="70sp"
+        android:textSize="75dp"
         app:backgroundTint="#FFB200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
         android:layout_marginBottom="16dp"
         android:text="\u00b73"
         android:textAllCaps="false"
-        android:textSize="70sp"
+        android:textSize="75dp"
         app:backgroundTint="#FFB200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/horizontalbtndvd"
@@ -84,7 +84,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="currentbest"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,24 +94,10 @@
         android:layout_height="1dp"
         android:layout_marginTop="10dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-    <LinearLayout
-        android:id="@+id/oldnumbercontainer"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:showDividers="middle"
-        app:layout_constraintBottom_toTopOf="@+id/container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/highscoreconstraint" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/highscoreconstraint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -124,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="time"
-            android:textSize="20sp"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -134,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="moves"
-            android:textSize="20sp"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/besttimetv" />
     </androidx.constraintlayout.widget.ConstraintLayout>

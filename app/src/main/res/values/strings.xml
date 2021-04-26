@@ -5,9 +5,16 @@
     <string name="dividemessagethree">You cannot divide this number by three</string>
     <string name="tobigmessage">"I'm sure you don't need a number this big"</string>
     <string name="highscoretext">Highscore for %1$d digits:</string>
-    <string name="objectivedto">As the name says, your objective in this gamemode is to get from a bigger number down to one. You can try setting highscores for either time or number of moves or both for different given number of digits. </string>
+    <string name="objectivedto">As the name says, your objective in this gamemode is to get from a bigger number down to 1. You can try setting highscores for either time or number of moves or both for different given number of digits. </string>
     <string name="objectiveft">"Here you have to find a way to get from one number to another. Time doesn't matter, so minimize the number of operations you do."</string>
     <string name="objectiveatgt">"As in Down To One you have to get to one as fast as possible (wether in terms of time or moves is up to you). But this time the number you multiply and divide by is three!\n\nBe warned: this way it's harder"</string>
-    <string name="Credits">"Mathematics:\n&#x20; &#x20; &#x20; &#x20; Eric Angelini (Brussels, Belgium)\n\nApp Developement:\n&#x20; &#x20; &#x20; &#x20; Doim\n\nThanks to my testers:\n&#x20; &#x20; Alpha\n&#x20; &#x20; &#x20; &#x20; Jannik, my little brother\n&#x20; &#x20; &#x20; &#x20; Melvin\n\nThank you for playing my first game ever!"</string>
+    <string name="Credits">"Mathematics:\n&#x20; &#x20; &#x20; &#x20; Eric Angelini (Brussels, Belgium)\n\nApp Developement:\n&#x20; &#x20; &#x20; &#x20; Doim\n\nThanks to my testers:\n&#x20; &#x20; Alpha\n&#x20; &#x20; &#x20; &#x20; Jannik (my little brother)\n&#x20; &#x20; &#x20; &#x20; Melvin\n&#x20; &#x20; Beta\n&#x20; &#x20; &#x20; &#x20; nobody yet\n\nAnd thank you for playing my first game ever!"</string>
+    <string name="t1">Before you can play, you have to pick the number of digits you want to start with</string>
+    <string name="t2">Now you can select one or more digits</string>
+    <string name="t3">Great! When you press the left button down there, only the selected digits will be doubled\n\nThe rest of the number stays the same</string>
+    <string name="t4">That means you can end up with one more digit than before</string>
+    <string name="t5">With the button on the right you can half only the selected number, so you can end up with one less digit than before\n\nOf course this only works for even numbers</string>
+    <string name="t6">"Perfect!\nUp there you will see the minimal amount of time and/or operations you needed to reach the objective\n\nNow you know how Brussels' Choice works. To find out how the different gamemodes work simply hold their buttons"</string>
+    <string name="t7">One last tip: When you select no digits the whole number will be doubled or halfed\n\nAnd now gl hf ^^</string>
 
 </resources>

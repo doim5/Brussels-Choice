@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,7 +39,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     int stellen;
     int zahlenid;
     SharedPreferences prefs;
-    String keymoves, keytime;
+    String keymoves_dto, keytime_dto;
 
     //attribute
     long zahl;
@@ -46,7 +48,6 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
 
     //layout
     LinearLayout container;
-    //LinearLayout oldnumbercontainer;
     ArrayList<Integer> ziffern;
     ArrayList<TextView> ziffernboxen;
     Button doublebtn, halfebtn;
@@ -97,7 +98,6 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
 
         //layout
         container = binding.container;
-        //oldnumbercontainer = binding.oldnumbercontainer;
         ziffern = new ArrayList<>();
         ziffernboxen = new ArrayList<>();
 
@@ -124,43 +124,45 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         tobigmessage = Snackbar.make(view, getString(R.string.tobigmessage), Snackbar.LENGTH_SHORT);
 
         //popups
-        //startpopup
-        dialogbuilder1 = new AlertDialog.Builder(this);
-        final View startpopupview = getLayoutInflater().inflate(R.layout.startpopup_dto, null);
+            //startpopup
+            dialogbuilder1 = new AlertDialog.Builder(this);
+            final View startpopupview = getLayoutInflater().inflate(R.layout.startpopup_dto, null);
 
-        startbtn = startpopupview.findViewById(R.id.startbtn);
-        numberpicker = startpopupview.findViewById(R.id.numberpicker);
+            startbtn = startpopupview.findViewById(R.id.startbtn);
+            numberpicker = startpopupview.findViewById(R.id.numberpicker);
 
-        numberpicker.setTextSize(80);
-        numberpicker.setMinValue(1);
-        numberpicker.setMaxValue(10);
-        numberpicker.setWrapSelectorWheel(false);
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                numberpicker.setTextSize(80);
+            }
+            numberpicker.setMinValue(3);
+            numberpicker.setMaxValue(10);
+            numberpicker.setWrapSelectorWheel(false);
 
-        startbtn.setOnClickListener(this);
+            startbtn.setOnClickListener(this);
 
-        dialogbuilder1.setView(startpopupview);
-        startpopup = dialogbuilder1.create();
+            dialogbuilder1.setView(startpopupview);
+            startpopup = dialogbuilder1.create();
 
-        //winpopup
-        dialogbuilder2 = new AlertDialog.Builder(this);
-        final View winpopupview = getLayoutInflater().inflate(R.layout.winpopup_dto, null);
+            //winpopup
+            dialogbuilder2 = new AlertDialog.Builder(this);
+            final View winpopupview = getLayoutInflater().inflate(R.layout.winpopup_dto, null);
 
-        digitnumbertv = winpopupview.findViewById(R.id.digitnumber);
-        //digitnumber in onclick start
+            digitnumbertv = winpopupview.findViewById(R.id.digitnumber);
+            //digitnumber in onclick start
 
-        timetv = winpopupview.findViewById(R.id.timetv);
-        movestv = winpopupview.findViewById(R.id.movestv);
+            timetv = winpopupview.findViewById(R.id.timetv);
+            movestv = winpopupview.findViewById(R.id.movestv);
 
-        restartbtn = winpopupview.findViewById(R.id.restartbtn);
-        closebtn = winpopupview.findViewById(R.id.closebtn);
+            restartbtn = winpopupview.findViewById(R.id.restartbtn);
+            closebtn = winpopupview.findViewById(R.id.closebtn);
 
-        restartbtn.setOnClickListener(this);
-        closebtn.setOnClickListener(this);
+            restartbtn.setOnClickListener(this);
+            closebtn.setOnClickListener(this);
 
-        dialogbuilder2.setView(winpopupview);
-        winpopup = dialogbuilder2.create();
+            dialogbuilder2.setView(winpopupview);
+            winpopup = dialogbuilder2.create();
 
-        startpopup.show();
+            startpopup.show();
     }
 
     public void onClick(View v) {
@@ -173,8 +175,8 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
             moves = -1;
 
             stellen = numberpicker.getValue();
-            keymoves = "moves" + stellen;
-            keytime = "time" + stellen;
+            keymoves_dto = "moves" + stellen;
+            keytime_dto = "time" + stellen;
 
             //für winpopup
             String digitnumber = stellen + " Digit";
@@ -191,8 +193,8 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
             timestart = currentTimeMillis();
 
             currentbesttv.setText(getString(R.string.highscoretext, stellen));
-            besttimetv.setText(gettime(prefs.getLong(keytime, 0)));
-            bestmovestv.setText(String.format(Locale.ENGLISH, "%d", prefs.getInt(keymoves, 0)));
+            besttimetv.setText(gettime(prefs.getLong(keytime_dto, 0)));
+            bestmovestv.setText(String.format(Locale.ENGLISH, "%d", prefs.getInt(keymoves_dto, 0)));
 
             currentbesttv.setVisibility(View.VISIBLE);
             besttimetv.setVisibility(View.VISIBLE);
@@ -253,6 +255,16 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        if(winpopup.isShowing()){
+            winpopup.dismiss();
+        }else if(startpopup.isShowing()){
+            startpopup.dismiss();
+        }
+        finish();
+    }
+
     private void zahlaktualisieren(){
         ziffernboxen.clear();                                              //alle textviews mit ziffern löschen
         container.removeAllViewsInLayout();
@@ -276,8 +288,8 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
             TextView ziffernbox = new TextView(this);               //temporäre referenz zu neuer ziffernbox
             ziffernbox.setId(counter);
             ziffernbox.setText(String.valueOf(ziffer));                     //add: ziffer in neue ziffernbox
-            //ziffernbox.setLayoutParams(lp);                                 //layoutparams festlegen
-            ziffernbox.setTextSize(50);                                     //set: textgröße
+            //ziffernbox.setLayoutParams(lp);                               //layoutparams festlegen
+            ziffernbox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 50);   //set: textgröße
             ziffernbox.setClickable(true);                                  //ziffernboxen anklickbar machen
             ziffernboxen.add(counter, ziffernbox);                          //add: neue zifferbox zur liste
 
@@ -471,12 +483,12 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         timetv.setText(zeit);
         movestv.setText(String.format(Locale.ENGLISH, "%d", moves));
 
-        if(prefs.getLong(keytime, 0)>time||prefs.getLong(keytime, 0)==0){
-            prefs.edit().putLong(keytime, time).apply();
+        if(prefs.getLong(keytime_dto, 0)>time||prefs.getLong(keytime_dto, 0)==0){
+            prefs.edit().putLong(keytime_dto, time).apply();
             besttimetv.setText(zeit);
         }
-        if(prefs.getInt(keymoves, 0)>moves||prefs.getInt(keymoves, 0)==0){
-            prefs.edit().putInt(keymoves, moves).apply();
+        if(prefs.getInt(keymoves_dto, 0)>moves||prefs.getInt(keymoves_dto, 0)==0){
+            prefs.edit().putInt(keymoves_dto, moves).apply();
             bestmovestv.setText(String.format(Locale.ENGLISH, "%d", moves));
         }
 

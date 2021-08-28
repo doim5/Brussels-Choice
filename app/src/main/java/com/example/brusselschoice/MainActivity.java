@@ -2,10 +2,19 @@ package com.example.brusselschoice;
 
 import android.content.Intent;
 import android.graphics.BlurMaskFilter;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -14,6 +23,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.brusselschoice.databinding.ActivityMainBinding;
@@ -30,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int screenheight, screenwidth;
 
     //layout
+    Toolbar tb;
     HorizontalScrollView scrollview, bglevel1, bglevel2, bglevel3;
     LinearLayout pages, page1, page2;
     Button playbtn, tutorialbtn, creditsbtn, dtobtn, ftbtn, atgtbtn;
@@ -51,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         //tools
         display = getWindowManager().getDefaultDisplay();
@@ -87,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //layout
+        tb = binding.tb;
+        setSupportActionBar(tb);
+
         pages = binding.pages;
         page1 = binding.page1;
         page2 = binding.page2;
@@ -143,7 +160,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return false;
         });
 
-        atgtbtn.setHeight(dtobtn.getHeight());
+        tutorialbtn.measure(0, 0);
+        tutorialbtn.setWidth(tutorialbtn.getMeasuredWidth() + 80);
+
+        dtobtn.measure(0,0);
+        atgtbtn.setHeight(dtobtn.getMeasuredHeight());
+        atgtbtn.measure(0,0);
+        atgtbtn.setWidth(atgtbtn.getMeasuredWidth() + 50);
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getResources().getColor(R.color.purple_700));
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.pay, menu);
+        MenuItem item = menu.getItem(0);
+        SpannableString text = new SpannableString("$");
+        text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, text.length(), 0);
+        item.setTitle(text);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.pay:
+                startActivity(new Intent(this, Pay.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -151,13 +203,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(v==playbtn){
             scrollview.smoothScrollTo(screenwidth, 0);
         }else if(v==tutorialbtn){
-
+            startActivity(new Intent(this, Tutorial.class));
         }else if(v==creditsbtn){
             startActivity(new Intent(this, Credits.class));
         }else if(v==dtobtn){
             startActivity(new Intent(this, DownToOne.class));
         }else if(v==ftbtn){
-
+            startActivity(new Intent(this, FromTo.class));
         }else if(v==atgtbtn){
             startActivity(new Intent(this, TheGoodThings.class));
         }else if(v==closebtn){

@@ -1,11 +1,11 @@
-package com.example.brusselschoice;
+package de.doim.brusselschoice;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.brusselschoice.databinding.ActivityPayBinding;
+import de.doim.brusselschoice.databinding.ActivityPayBinding;
 
 public class Pay extends AppCompatActivity {
 

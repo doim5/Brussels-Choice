@@ -1,4 +1,4 @@
-package com.example.brusselschoice;
+package de.doim.brusselschoice;
 
 import android.content.Intent;
 import android.graphics.BlurMaskFilter;
@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -27,7 +26,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.brusselschoice.databinding.ActivityMainBinding;
+import de.doim.brusselschoice.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.brusselschoice;
+package com.doim.brusselschoice;
 
 import org.junit.Test;
 

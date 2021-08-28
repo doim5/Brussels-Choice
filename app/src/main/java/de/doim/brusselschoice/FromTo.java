@@ -1,57 +1,62 @@
-package com.example.brusselschoice;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+package de.doim.brusselschoice;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
-import com.example.brusselschoice.databinding.ActivityDownToOneBinding;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import de.doim.brusselschoice.databinding.ActivityFromToBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Random;
 import java.util.Stack;
 
-import static java.lang.System.currentTimeMillis;
+public class FromTo extends AppCompatActivity implements View.OnClickListener{
 
-public class DownToOne extends AppCompatActivity implements View.OnClickListener{
-
-    ActivityDownToOneBinding binding;
+    ActivityFromToBinding binding;
 
     //tools
-    Random rn;
+    ArrayList<String> ids;
+    CharSequence btntext;
+    String text;
+    String[] numbers;
+    Long x, y;
+    int levelcount;
+
     TextView selected;
     ArrayList<Integer> selection;
     int index1, index2;
     long max, min;
-    long timestart, timeend, time;
-    int stellen;
     int zahlenid;
     SharedPreferences prefs;
-    String keymoves_dto, keytime_dto;
+    String keymoves_ft;
+
+    ViewFlipper flipper;
 
     //attribute
-    long zahl, erstezahl, letztezahl;
+    long zahl, letztezahl;
     int orange;
     int moves;
 
     //layout
+    LinkedList<Button> btns;
+
     LinearLayout container;
     ArrayList<Integer> ziffern;
     ArrayList<TextView> ziffernboxen;
-    Button doublebtn, halfebtn, undobtn, restartcurrentbtn;
-    TextView currentbesttv, besttimetv, bestmovestv;
+    Button doublebtn, halfebtn, restartcurrentbtn, undobtn;
+    TextView currentbesttv, bestmovestv;
 
     //snackbar
     //divide odd number
@@ -60,31 +65,30 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     //zahl zu groß
     Snackbar tobigmessage;
 
-    //popups
-
-    //start popup
-    AlertDialog.Builder dialogbuilder1;
-    AlertDialog startpopup;
-    NumberPicker numberpicker;
-    Button startbtn;
-
     //win popup
     AlertDialog.Builder dialogbuilder2;
     AlertDialog winpopup;
     Button restartbtn, closebtn;
-    TextView digitnumbertv, timetv, movestv;
+    TextView ftnumberstv, movestv;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityDownToOneBinding.inflate(getLayoutInflater());
+        binding = ActivityFromToBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+
         setContentView(view);
+        setTitle("Levels");
 
-        setTitle("Down To One");
+        //Tools
+        levelcount = 19;
+        ids = new ArrayList<>();
+        for(int i = 1; i<=levelcount; i++){
+            ids.add("btn"+i);
+            ids.add("btnspace1");
+        }
 
-        //tools
-        rn = new Random();
+
         selected = null;
         selection = new ArrayList<>();
         index1 = 0;
@@ -92,31 +96,57 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         zahlenid = 0;
         prefs = this.getSharedPreferences("highscores", Context.MODE_PRIVATE);
 
+        flipper = binding.flipper;
+        flipper.setInAnimation(this, android.R.anim.slide_in_left);
+        flipper.setOutAnimation(this, android.R.anim.slide_out_right);
+
         //attribute
         orange = 0x7DFFB200;
-        stellen = 1;
 
         //layout
+        btns = new LinkedList<>();
+
+        for(String s : ids){
+            int resid = getResources().getIdentifier(s, "id", getPackageName());
+            btns.add(findViewById(resid));
+            btns.getLast().setOnClickListener(this);
+        }
+
+
+        btns.getFirst().measure(0,0);
+        btns.getFirst().setHeight(btns.getFirst().getMeasuredWidth());
+        btns.getFirst().measure(0,0);
+        btns.getFirst().setText("1-3");
+        btns.getFirst().setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
+        boolean first = true;
+        for(Button b : btns){
+            if(first){
+                first = false;
+            }else{
+                b.setWidth(btns.getFirst().getMeasuredWidth());
+                b.setHeight(btns.getFirst().getMeasuredHeight());
+            }
+        }
+
+
         container = binding.container;
         ziffern = new ArrayList<>();
         ziffernboxen = new ArrayList<>();
 
         doublebtn = binding.doublebtn;
         halfebtn = binding.halfebtn;
-        undobtn = binding.undobtn;
         restartcurrentbtn = binding.restartcurrentbtn;
+        undobtn = binding.undobtn;
 
         doublebtn.setOnClickListener(this);
         halfebtn.setOnClickListener(this);
-        undobtn.setOnClickListener(this);
         restartcurrentbtn.setOnClickListener(this);
+        undobtn.setOnClickListener(this);
 
         currentbesttv = binding.currentbesttv;
-        besttimetv = binding.besttimetv;
         bestmovestv = binding.bestmovestv;
 
         currentbesttv.setVisibility(View.INVISIBLE);
-        besttimetv.setVisibility(View.INVISIBLE);
         bestmovestv.setVisibility(View.INVISIBLE);
 
         //snackbars
@@ -127,98 +157,61 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         //zu große zahl
         tobigmessage = Snackbar.make(view, getString(R.string.tobigmessage), Snackbar.LENGTH_SHORT);
 
-        //popups
-            //startpopup
-            dialogbuilder1 = new AlertDialog.Builder(this);
-            final View startpopupview = getLayoutInflater().inflate(R.layout.startpopup_dto, null);
+        //winpopup
+        dialogbuilder2 = new AlertDialog.Builder(this);
+        final View winpopupview = getLayoutInflater().inflate(R.layout.winpopup_ft, null);
 
-            startbtn = startpopupview.findViewById(R.id.startbtn);
-            numberpicker = startpopupview.findViewById(R.id.numberpicker);
+        ftnumberstv = winpopupview.findViewById(R.id.ftnumbers);
+        //digitnumber in onclick start
 
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
-                numberpicker.setTextSize(80);
-            }
-            numberpicker.setMinValue(3);
-            numberpicker.setMaxValue(10);
-            numberpicker.setWrapSelectorWheel(false);
+        movestv = winpopupview.findViewById(R.id.movestv_ft);
 
-            startbtn.setOnClickListener(this);
+        restartbtn = winpopupview.findViewById(R.id.restartbtn_ft);
+        closebtn = winpopupview.findViewById(R.id.closebtn_ft);
 
-            dialogbuilder1.setView(startpopupview);
-            startpopup = dialogbuilder1.create();
-            startpopup.setCancelable(false);
-            startpopup.setCanceledOnTouchOutside(false);
+        restartbtn.setOnClickListener(this);
+        closebtn.setOnClickListener(this);
 
-            //winpopup
-            dialogbuilder2 = new AlertDialog.Builder(this);
-            final View winpopupview = getLayoutInflater().inflate(R.layout.winpopup_dto, null);
-
-            digitnumbertv = winpopupview.findViewById(R.id.digitnumber);
-            //digitnumber in onclick start
-
-            timetv = winpopupview.findViewById(R.id.timetv);
-            movestv = winpopupview.findViewById(R.id.movestv);
-
-            restartbtn = winpopupview.findViewById(R.id.restartbtn);
-            closebtn = winpopupview.findViewById(R.id.closebtn);
-
-            restartbtn.setOnClickListener(this);
-            closebtn.setOnClickListener(this);
-
-            dialogbuilder2.setView(winpopupview);
-            winpopup = dialogbuilder2.create();
-            winpopup.setCanceledOnTouchOutside(false);
-            winpopup.setCancelable(false);
-
-            startpopup.show();
+        dialogbuilder2.setView(winpopupview);
+        winpopup = dialogbuilder2.create();
+        winpopup.setCanceledOnTouchOutside(false);
+        winpopup.setCancelable(false);
     }
 
+    @Override
     public void onClick(View v) {
+        for(Button b : btns){
+            if(v == b){
+                btntext = b.getText();
+                text = btntext.toString().replaceAll("\n", "");
+                numbers = text.split("-");
+                x = Long.parseLong(numbers[0]);
+                y = Long.parseLong(numbers[1]);
+
+                flipper.showNext();
+                setTitle("From " + x + " to " + y);
+
+                start();
+            }
+        }
         if(v==doublebtn){
             verdoppeln();
         }else if(v==halfebtn){
             halbieren();
         }
-        else if(v==restartcurrentbtn){
-            restart();
-        }
         else if(v==undobtn){
             undo();
         }
-        else if(v==startbtn){
-            moves = -1;
-
-            stellen = numberpicker.getValue();
-            keymoves_dto = "moves" + stellen;
-            keytime_dto = "time" + stellen;
-
-            //für winpopup
-            String digitnumber = stellen + " Digit";
-
-            if(stellen > 1){
-                digitnumber += "s";
-            }
-            digitnumbertv.setText(digitnumber);
-            //für winpopup
-
-            zahlfestlegen(stellen);
-            zahlaktualisieren();
-            startpopup.dismiss();
-            timestart = currentTimeMillis();
-
-            currentbesttv.setText(getString(R.string.highscoretext, stellen));
-            besttimetv.setText(gettime(prefs.getLong(keytime_dto, 0)));
-            bestmovestv.setText(String.format(Locale.ENGLISH, "%d", prefs.getInt(keymoves_dto, 0)));
-
-            currentbesttv.setVisibility(View.VISIBLE);
-            besttimetv.setVisibility(View.VISIBLE);
-            bestmovestv.setVisibility(View.VISIBLE);
-        }else if(v==restartbtn){
+        else if(v==restartcurrentbtn){
+            restart();
+        }
+        else if(v==restartbtn){
             winpopup.dismiss();
-            startpopup.show();
+            start();
         }else if(v==closebtn){
             winpopup.dismiss();
-            finish();
+            flipper.showPrevious();
+            setTitle("Levels");
         }else {
             //check: ob eine ziffer geklickt wurde
             for (TextView tv1 : ziffernboxen) {
@@ -269,14 +262,37 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-    @Override
     public void onBackPressed(){
-        if(winpopup.isShowing()){
-            winpopup.dismiss();
-        }else if(startpopup.isShowing()){
-            startpopup.dismiss();
+        if(getTitle().equals("Levels")){
+            finish();
+        }else{
+            flipper.showPrevious();
+            setTitle("Levels");
         }
-        finish();
+    }
+
+    private void start(){
+        moves = -1;
+
+        keymoves_ft = "moves" + x + y + "ft";
+
+        //für winpopup
+        String numbers = x + " - " + y;
+
+        ftnumberstv.setText(numbers);
+        //für winpopup
+
+
+        zahl = x;
+        System.out.println(x);
+        zahlaktualisieren();
+
+
+        currentbesttv.setText("Your highscore:");
+        bestmovestv.setText(String.format(Locale.ENGLISH, "%d", prefs.getInt(keymoves_ft, 0)));
+
+        currentbesttv.setVisibility(View.VISIBLE);
+        bestmovestv.setVisibility(View.VISIBLE);
     }
 
     private void zahlaktualisieren(){
@@ -323,7 +339,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
 
         selection.clear();
 
-        if(zahl==1){
+        if(zahl==y){
             win();
         }
     }
@@ -412,17 +428,6 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         zahlaktualisieren();
     }
 
-    private void zahlfestlegen(int i){
-
-        min = (long) Math.pow(10, i-1);
-        max = min*10;
-
-        do{
-            zahl = (long) (Math.random() * (max-min) + min);
-        }while(zahl%5==0||zahl==1);
-        erstezahl = zahl;
-    }
-
     private ArrayList<Integer> zahlzuziffern(long z){
         long temp = z;
         int counter = 0;
@@ -455,10 +460,9 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     }
 
     private void restart(){
-        zahl = erstezahl;
+        zahl = x;
         zahlaktualisieren();
         moves = 0;
-        timestart = currentTimeMillis();
     }
 
     private void undo(){
@@ -467,57 +471,11 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         moves-=2;
     }
 
-    private String gettime(long t){
-        int sec = (int) t%60;
-        t -= sec;
-        t = t/60;
-
-        int min = (int) t%60;
-        t -= min;
-        t = t/60;
-
-        int h = (int) t%24;
-        t -= h;
-        t = t/24;
-
-        int d = (int) t;
-
-        String rueckgabe = Integer.toString(sec);
-
-        if(sec<10){
-            rueckgabe = "0" + rueckgabe;
-        }
-
-        if(min>0){
-            rueckgabe = min + ":" + rueckgabe;
-        }else{
-            rueckgabe = "00:" + rueckgabe;
-        }
-        if(h>0){
-            rueckgabe = h + ":" + rueckgabe;
-        }
-        if(d>0){
-            rueckgabe = d + " Days " + rueckgabe;
-        }
-
-        return rueckgabe;
-    }
-
     private void win(){
-        timeend = currentTimeMillis();
-        time = (timeend-timestart)/1000;
-
-        String zeit = gettime(time);
-
-        timetv.setText(zeit);
         movestv.setText(String.format(Locale.ENGLISH, "%d", moves));
 
-        if(prefs.getLong(keytime_dto, 0)>time||prefs.getLong(keytime_dto, 0)==0){
-            prefs.edit().putLong(keytime_dto, time).apply();
-            besttimetv.setText(zeit);
-        }
-        if(prefs.getInt(keymoves_dto, 0)>moves||prefs.getInt(keymoves_dto, 0)==0){
-            prefs.edit().putInt(keymoves_dto, moves).apply();
+        if(prefs.getInt(keymoves_ft, 0)>moves||prefs.getInt(keymoves_ft, 0)==0){
+            prefs.edit().putInt(keymoves_ft, moves).apply();
             bestmovestv.setText(String.format(Locale.ENGLISH, "%d", moves));
         }
 

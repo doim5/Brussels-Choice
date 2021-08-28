@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Stack;
 
+import static java.lang.System.currentTimeMillis;
+
 public class FromTo extends AppCompatActivity implements View.OnClickListener{
 
     ActivityFromToBinding binding;
@@ -45,7 +47,7 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
     ViewFlipper flipper;
 
     //attribute
-    long zahl;
+    long zahl, letztezahl;
     int orange;
     int moves;
 
@@ -55,7 +57,7 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
     LinearLayout container;
     ArrayList<Integer> ziffern;
     ArrayList<TextView> ziffernboxen;
-    Button doublebtn, halfebtn;
+    Button doublebtn, halfebtn, restartcurrentbtn, undobtn;
     TextView currentbesttv, bestmovestv;
 
     //snackbar
@@ -81,10 +83,11 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
         setTitle("Levels");
 
         //Tools
-        levelcount = 23;
+        levelcount = 19;
         ids = new ArrayList<>();
         for(int i = 1; i<=levelcount; i++){
             ids.add("btn"+i);
+            ids.add("btnspace1");
         }
 
 
@@ -134,9 +137,13 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
 
         doublebtn = binding.doublebtn;
         halfebtn = binding.halfebtn;
+        restartcurrentbtn = binding.restartcurrentbtn;
+        undobtn = binding.undobtn;
 
         doublebtn.setOnClickListener(this);
         halfebtn.setOnClickListener(this);
+        restartcurrentbtn.setOnClickListener(this);
+        undobtn.setOnClickListener(this);
 
         currentbesttv = binding.currentbesttv;
         bestmovestv = binding.bestmovestv;
@@ -169,6 +176,8 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
 
         dialogbuilder2.setView(winpopupview);
         winpopup = dialogbuilder2.create();
+        winpopup.setCanceledOnTouchOutside(false);
+        winpopup.setCancelable(false);
     }
 
     @Override
@@ -191,6 +200,12 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
             verdoppeln();
         }else if(v==halfebtn){
             halbieren();
+        }
+        else if(v==undobtn){
+            undo();
+        }
+        else if(v==restartcurrentbtn){
+            restart();
         }
         else if(v==restartbtn){
             winpopup.dismiss();
@@ -332,6 +347,7 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void verdoppeln(){
+        letztezahl = zahl;
         long subzahl = getselection();
         ArrayList<Integer> neueziffern;
 
@@ -357,6 +373,7 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void halbieren(){
+        letztezahl = zahl;
         long subzahl = getselection();
         if(selection.isEmpty()){
             if(zahl%2==1){
@@ -442,6 +459,18 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
         while(!temp.isEmpty()){
             ziffernboxen.add(temp.pop());
         }
+    }
+
+    private void restart(){
+        zahl = x;
+        zahlaktualisieren();
+        moves = 0;
+    }
+
+    private void undo(){
+        zahl = letztezahl;
+        zahlaktualisieren();
+        moves-=2;
     }
 
     private void win(){

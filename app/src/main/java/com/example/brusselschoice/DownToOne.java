@@ -42,7 +42,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     String keymoves_dto, keytime_dto;
 
     //attribute
-    long zahl;
+    long zahl, erstezahl, letztezahl;
     int orange;
     int moves;
 
@@ -50,7 +50,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     LinearLayout container;
     ArrayList<Integer> ziffern;
     ArrayList<TextView> ziffernboxen;
-    Button doublebtn, halfebtn;
+    Button doublebtn, halfebtn, undobtn, restartcurrentbtn;
     TextView currentbesttv, besttimetv, bestmovestv;
 
     //snackbar
@@ -103,9 +103,13 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
 
         doublebtn = binding.doublebtn;
         halfebtn = binding.halfebtn;
+        undobtn = binding.undobtn;
+        restartcurrentbtn = binding.restartcurrentbtn;
 
         doublebtn.setOnClickListener(this);
         halfebtn.setOnClickListener(this);
+        undobtn.setOnClickListener(this);
+        restartcurrentbtn.setOnClickListener(this);
 
         currentbesttv = binding.currentbesttv;
         besttimetv = binding.besttimetv;
@@ -142,6 +146,8 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
 
             dialogbuilder1.setView(startpopupview);
             startpopup = dialogbuilder1.create();
+            startpopup.setCancelable(false);
+            startpopup.setCanceledOnTouchOutside(false);
 
             //winpopup
             dialogbuilder2 = new AlertDialog.Builder(this);
@@ -161,6 +167,8 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
 
             dialogbuilder2.setView(winpopupview);
             winpopup = dialogbuilder2.create();
+            winpopup.setCanceledOnTouchOutside(false);
+            winpopup.setCancelable(false);
 
             startpopup.show();
     }
@@ -170,6 +178,12 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
             verdoppeln();
         }else if(v==halfebtn){
             halbieren();
+        }
+        else if(v==restartcurrentbtn){
+            restart();
+        }
+        else if(v==undobtn){
+            undo();
         }
         else if(v==startbtn){
             moves = -1;
@@ -315,6 +329,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     }
 
     private void verdoppeln(){
+        letztezahl = zahl;
         long subzahl = getselection();
         ArrayList<Integer> neueziffern;
 
@@ -340,6 +355,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     }
 
     private void halbieren(){
+        letztezahl = zahl;
         long subzahl = getselection();
         if(selection.isEmpty()){
             if(zahl%2==1){
@@ -404,7 +420,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         do{
             zahl = (long) (Math.random() * (max-min) + min);
         }while(zahl%5==0||zahl==1);
-
+        erstezahl = zahl;
     }
 
     private ArrayList<Integer> zahlzuziffern(long z){
@@ -436,6 +452,19 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
         while(!temp.isEmpty()){
             ziffernboxen.add(temp.pop());
         }
+    }
+
+    private void restart(){
+        zahl = erstezahl;
+        zahlaktualisieren();
+        moves = 0;
+        timestart = currentTimeMillis();
+    }
+
+    private void undo(){
+        zahl = letztezahl;
+        zahlaktualisieren();
+        moves-=2;
     }
 
     private String gettime(long t){

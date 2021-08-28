@@ -450,6 +450,7 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
     private void restart(){
         zahl = erstezahl;
         zahlaktualisieren();
+        selection.clear();
         moves = 0;
         timestart = currentTimeMillis();
     }
@@ -457,6 +458,7 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
     private void undo(){
         zahl = letztezahl;
         zahlaktualisieren();
+        selection.clear();
         moves-=2;
     }
 

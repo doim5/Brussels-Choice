@@ -462,12 +462,14 @@ public class FromTo extends AppCompatActivity implements View.OnClickListener{
     private void restart(){
         zahl = x;
         zahlaktualisieren();
+        selection.clear();
         moves = 0;
     }
 
     private void undo(){
         zahl = letztezahl;
         zahlaktualisieren();
+        selection.clear();
         moves-=2;
     }
 

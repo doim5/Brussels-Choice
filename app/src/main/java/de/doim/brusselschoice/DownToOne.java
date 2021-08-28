@@ -457,6 +457,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     private void restart(){
         zahl = erstezahl;
         zahlaktualisieren();
+        selection.clear();
         moves = 0;
         timestart = currentTimeMillis();
     }
@@ -464,6 +465,7 @@ public class DownToOne extends AppCompatActivity implements View.OnClickListener
     private void undo(){
         zahl = letztezahl;
         zahlaktualisieren();
+        selection.clear();
         moves-=2;
     }
 

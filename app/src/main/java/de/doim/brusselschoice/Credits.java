@@ -1,4 +1,4 @@
-package com.example.brusselschoice;
+package de.doim.brusselschoice;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.brusselschoice.databinding.ActivityCreditsBinding;
+import de.doim.brusselschoice.databinding.ActivityCreditsBinding;
 
 public class Credits extends AppCompatActivity {
 

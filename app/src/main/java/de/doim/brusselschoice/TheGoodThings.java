@@ -1,9 +1,7 @@
-package com.example.brusselschoice;
+package de.doim.brusselschoice;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,7 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import com.example.brusselschoice.databinding.ActivityTutorialBinding;
+import de.doim.brusselschoice.databinding.ActivityDownToOneBinding;
+import de.doim.brusselschoice.databinding.ActivityTheGoodThingsBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -27,9 +26,9 @@ import java.util.Stack;
 
 import static java.lang.System.currentTimeMillis;
 
-public class Tutorial extends AppCompatActivity implements View.OnClickListener{
+public class TheGoodThings extends AppCompatActivity implements View.OnClickListener{
 
-    ActivityTutorialBinding binding;
+    ActivityTheGoodThingsBinding binding;
 
     //tools
     Random rn;
@@ -41,13 +40,10 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
     int stellen;
     int zahlenid;
     SharedPreferences prefs;
-    String keymoves, keytime;
-    TextView grayscreen, helper, whitestripe, whitestripe2;
-    Button gobtn;
-    ConstraintLayout grayscreenconstraint, highscoreconstraint;
+    String keymoves_tgt, keytime_tgt;
 
     //attribute
-    long zahl;
+    long zahl, erstezahl, letztezahl;
     int orange;
     int moves;
 
@@ -56,9 +52,8 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
     //LinearLayout oldnumbercontainer;
     ArrayList<Integer> ziffern;
     ArrayList<TextView> ziffernboxen;
-    Button doublebtn, halfebtn;
+    Button doublebtn, halfebtn, restartcurrentbtn, undobtn;
     TextView currentbesttv, besttimetv, bestmovestv;
-    View dvdr;
 
     //snackbar
     //divide odd number
@@ -75,13 +70,20 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
     NumberPicker numberpicker;
     Button startbtn;
 
+    //win popup
+    AlertDialog.Builder dialogbuilder2;
+    AlertDialog winpopup;
+    Button restartbtn, closebtn;
+    TextView digitnumbertv, timetv, movestv;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityTutorialBinding.inflate(getLayoutInflater());
+
+        binding = ActivityTheGoodThingsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        setTitle("Tutorial");
+        setTitle("The Good Things");
 
         //tools
         rn = new Random();
@@ -91,23 +93,6 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
         index2 = 0;
         zahlenid = 0;
         prefs = this.getSharedPreferences("highscores", Context.MODE_PRIVATE);
-        grayscreen = binding.grayscreen;
-        grayscreen.setElevation(0);
-        helper = binding.helper;
-        helper.setText(R.string.t1);
-        helper.setElevation(500f);
-        gobtn = binding.gobtn;
-        gobtn.setOnClickListener(this);
-        whitestripe = binding.whitestripe;
-        whitestripe.setVisibility(View.GONE);
-
-        whitestripe2 = binding.whitestripe2;
-        whitestripe.setVisibility(View.GONE);
-
-        grayscreenconstraint = binding.grayscreenconstraint;
-        grayscreenconstraint.setElevation(9f);
-
-        highscoreconstraint = binding.highscoreconstraint;
 
         //attribute
         orange = 0x7DFFB200;
@@ -119,14 +104,15 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
         ziffern = new ArrayList<>();
         ziffernboxen = new ArrayList<>();
 
-        doublebtn = binding.doublebtn;
-        halfebtn = binding.halfebtn;
+        doublebtn = binding.triplebtn;
+        halfebtn = binding.thirdbtn;
+        restartcurrentbtn = binding.restartcurrentbtn;
+        undobtn = binding.undobtn;
 
         doublebtn.setOnClickListener(this);
         halfebtn.setOnClickListener(this);
-
-        doublebtn.setClickable(false);
-        halfebtn.setClickable(false);
+        restartcurrentbtn.setOnClickListener(this);
+        undobtn.setOnClickListener(this);
 
         currentbesttv = binding.currentbesttv;
         besttimetv = binding.besttimetv;
@@ -136,65 +122,78 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
         besttimetv.setVisibility(View.INVISIBLE);
         bestmovestv.setVisibility(View.INVISIBLE);
 
-        dvdr = binding.divider;
-
         //snackbars
 
         //divide odd number
-        dividemessage = Snackbar.make(view, getString(R.string.dividemessagetwo), Snackbar.LENGTH_SHORT);
+        dividemessage = Snackbar.make(view, getString(R.string.dividemessagethree), Snackbar.LENGTH_SHORT);
 
         //zu große zahl
         tobigmessage = Snackbar.make(view, getString(R.string.tobigmessage), Snackbar.LENGTH_SHORT);
 
         //popups
-            //startpopup
-            dialogbuilder1 = new AlertDialog.Builder(this);
-            final View startpopupview = getLayoutInflater().inflate(R.layout.startpopup_dto, null);
+        //startpopup
+        dialogbuilder1 = new AlertDialog.Builder(this);
+        final View startpopupview = getLayoutInflater().inflate(R.layout.startpopup_dto, null);
 
-            startbtn = startpopupview.findViewById(R.id.startbtn);
-            numberpicker = startpopupview.findViewById(R.id.numberpicker);
+        startbtn = startpopupview.findViewById(R.id.startbtn);
+        numberpicker = startpopupview.findViewById(R.id.numberpicker);
 
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
-                numberpicker.setTextSize(80);
-            }
-            numberpicker.setMinValue(3);
-            numberpicker.setMaxValue(10);
-            numberpicker.setWrapSelectorWheel(false);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+            numberpicker.setTextSize(80);
+        }
+        numberpicker.setMinValue(2);
+        numberpicker.setMaxValue(10);
+        numberpicker.setWrapSelectorWheel(false);
 
-            startbtn.setOnClickListener(this);
+        startbtn.setOnClickListener(this);
 
-            dialogbuilder1.setView(startpopupview);
-            startpopup = dialogbuilder1.create();
-            startpopup.setCancelable(false);
-            startpopup.setCanceledOnTouchOutside(false);
+        dialogbuilder1.setView(startpopupview);
+        startpopup = dialogbuilder1.create();
+        startpopup.setCanceledOnTouchOutside(false);
+        startpopup.setCancelable(false);
+
+        //winpopup
+        dialogbuilder2 = new AlertDialog.Builder(this);
+        final View winpopupview = getLayoutInflater().inflate(R.layout.winpopup_dto, null);
+
+        digitnumbertv = winpopupview.findViewById(R.id.digitnumber);
+        //digitnumber in onclick start
+
+        timetv = winpopupview.findViewById(R.id.timetv);
+        movestv = winpopupview.findViewById(R.id.movestv);
+
+        restartbtn = winpopupview.findViewById(R.id.restartbtn);
+        closebtn = winpopupview.findViewById(R.id.closebtn);
+
+        restartbtn.setOnClickListener(this);
+        closebtn.setOnClickListener(this);
+
+        dialogbuilder2.setView(winpopupview);
+        winpopup = dialogbuilder2.create();
+        winpopup.setCancelable(false);
+        winpopup.setCanceledOnTouchOutside(false);
+
+        startpopup.show();
     }
 
     public void onClick(View v) {
         if(v==doublebtn){
-            if(!halfebtn.isClickable()){
-                grayscreenconstraint.setElevation(200f);
-                helper.setText(R.string.t4);
-                doublebtn.setElevation(0f);
-                doublebtn.setClickable(false);
-                gobtn.setText("GOT IT!");
-                gobtn.setVisibility(View.VISIBLE);
-            }
             verdoppeln();
         }else if(v==halfebtn){
-
             halbieren();
         }
+        else if(v==restartcurrentbtn){
+            restart();
+        }
+        else if(v==undobtn){
+            undo();
+        }
         else if(v==startbtn){
-            container.setElevation(50f);
-            whitestripe.setElevation(10f);
-            whitestripe.setVisibility(View.VISIBLE);
-            helper.setText(R.string.t2);
-            helper.setVisibility(View.VISIBLE);
             moves = -1;
 
             stellen = numberpicker.getValue();
-            keymoves = "moves" + stellen;
-            keytime = "time" + stellen;
+            keymoves_tgt = "moves" + stellen + "tgt";
+            keytime_tgt = "time" + stellen + "tgt";
 
             //für winpopup
             String digitnumber = stellen + " Digit";
@@ -202,7 +201,7 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
             if(stellen > 1){
                 digitnumber += "s";
             }
-
+            digitnumbertv.setText(digitnumber);
             //für winpopup
 
             zahlfestlegen(stellen);
@@ -211,27 +210,18 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
             timestart = currentTimeMillis();
 
             currentbesttv.setText(getString(R.string.highscoretext, stellen));
-            besttimetv.setText(gettime(prefs.getLong(keytime, 0)));
-            bestmovestv.setText(String.format(Locale.ENGLISH, "%d", prefs.getInt(keymoves, 0)));
+            besttimetv.setText(gettime(prefs.getLong(keytime_tgt, 0)));
+            bestmovestv.setText(String.format(Locale.ENGLISH, "%d", prefs.getInt(keymoves_tgt, 0)));
 
-        }else if(v==gobtn){
-            if(gobtn.getText().equals("GO!")) {
-                startpopup.show();
-                helper.setVisibility(View.GONE);
-                gobtn.setVisibility(View.GONE);
-            }else if(gobtn.getText().equals("GOT IT!")){
-                grayscreenconstraint.setElevation(9f);
-                gobtn.setVisibility(View.GONE);
-                helper.setText(R.string.t5);
-                halfebtn.setElevation(100f);
-                halfebtn.setClickable(true);
-            }else if(gobtn.getText().equals("ALRIGHT!")){
-                helper.setText(R.string.t7);
-
-                gobtn.setText("BACK");
-            }else{
-                finish();
-            }
+            currentbesttv.setVisibility(View.VISIBLE);
+            besttimetv.setVisibility(View.VISIBLE);
+            bestmovestv.setVisibility(View.VISIBLE);
+        }else if(v==restartbtn){
+            winpopup.dismiss();
+            startpopup.show();
+        }else if(v==closebtn){
+            winpopup.dismiss();
+            finish();
         }else {
             //check: ob eine ziffer geklickt wurde
             for (TextView tv1 : ziffernboxen) {
@@ -240,7 +230,7 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
                     if (selected == null) {
                         //alle ziffernboxen weiß machen
                         for (TextView tv2 : ziffernboxen) {
-                            tv2.setBackgroundColor(0xFFFFFFFF);
+                            tv2.setBackgroundColor(0x00FFFFFF);
                         }
                         //ausgewählte ziffernbox orange und auswahl speichern
                         tv1.setBackgroundColor(orange);
@@ -248,11 +238,6 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
                         selected = tv1;
                         selection.add(Integer.parseInt(tv1.getText().toString()));
                     } else {
-                        if(!doublebtn.isClickable()&&!halfebtn.isClickable()){
-                            doublebtn.setClickable(true);
-                            doublebtn.setElevation(100f);
-                            helper.setText(R.string.t3);
-                        }
                         index1 = ziffernboxen.indexOf(tv1);
                         index2 = ziffernboxen.indexOf(selected);
                         //ausgewählte box wieder weiß machen bei zweitem klick ansonsten rauf bzw runter alle orange
@@ -287,14 +272,6 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
-    @Override
-    public void onBackPressed(){
-        if(startpopup.isShowing()){
-            startpopup.dismiss();
-        }
-        finish();
-    }
-
     private void zahlaktualisieren(){
         ziffernboxen.clear();                                              //alle textviews mit ziffern löschen
         container.removeAllViewsInLayout();
@@ -321,8 +298,6 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
             //ziffernbox.setLayoutParams(lp);                               //layoutparams festlegen
             ziffernbox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 50);   //set: textgröße
             ziffernbox.setClickable(true);                                  //ziffernboxen anklickbar machen
-            ziffernbox.setBackgroundColor(0xFFFFFFFF);
-            ziffernbox.setElevation(10f);
             ziffernboxen.add(counter, ziffernbox);                          //add: neue zifferbox zur liste
 
             counter++;
@@ -340,27 +315,31 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
         moves++;
 
         selection.clear();
+
+        if(zahl==1){
+            win();
+        }
     }
 
     private void verdoppeln(){
+        letztezahl = zahl;
         long subzahl = getselection();
         ArrayList<Integer> neueziffern;
 
         if (selection.isEmpty()) {
-            zahl = zahl*2;
+            zahl = zahl*3;
             neueziffern = zahlzuziffern(zahl);
             if(neueziffern.size()>13){
                 tobigmessage.show();
-                zahl = zahl/2;
+                zahl = zahl/3;
             }else {
                 zahlaktualisieren();
             }
         } else {
-            subzahl = subzahl*2;
+            subzahl = subzahl*3;
             neueziffern = zahlzuziffern(subzahl);
             if(ziffern.size()-selection.size()+neueziffern.size()>13){
                 tobigmessage.show();
-                //subzahl = subzahl/2;
             }else {
                 zahleinsetzen(subzahl);
             }
@@ -368,56 +347,22 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void halbieren(){
+        letztezahl = zahl;
         long subzahl = getselection();
         if(selection.isEmpty()){
-            if(zahl%2==1){
-                dividemessage.show();
-            }else{
-                zahl = zahl / 2;
+            if(zahl%3==0){
+                zahl = zahl / 3;
                 zahlaktualisieren();
-
-                tutorialend();
+            }else{
+                dividemessage.show();
             }
         }else {
-            if(subzahl%2==1){
-                dividemessage.show();
-            }else{
-                subzahl = subzahl / 2;
+            if(subzahl%3==0){
+                subzahl = subzahl / 3;
                 zahleinsetzen(subzahl);
-
-                tutorialend();
+            }else{
+                dividemessage.show();
             }
-        }
-    }
-
-    private void tutorialend(){
-        grayscreenconstraint.setElevation(500f);
-        helper.setText(R.string.t6);
-        helper.setElevation(501f);
-        halfebtn.setClickable(false);
-        gobtn.setText("ALRIGHT!");
-        gobtn.setVisibility(View.VISIBLE);
-        whitestripe2.setElevation(501f);
-        whitestripe.setVisibility(View.VISIBLE);
-        currentbesttv.setElevation(502f);
-
-        whitestripe.setVisibility(View.GONE);
-        container.setElevation(0f);
-
-        timeend = currentTimeMillis();
-        time = (timeend-timestart)/1000;
-
-        String zeit = gettime(time);
-
-        besttimetv.setText(zeit);
-        bestmovestv.setText(String.format(Locale.ENGLISH, "%d", moves));
-        besttimetv.setVisibility(View.VISIBLE);
-        bestmovestv.setVisibility(View.VISIBLE);
-        highscoreconstraint.setElevation(502f);
-        currentbesttv.setVisibility(View.VISIBLE);
-
-        for(TextView tv : ziffernboxen){
-            tv.setClickable(false);
         }
     }
 
@@ -464,10 +409,11 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
         min = (long) Math.pow(10, i-1);
         max = min*10;
 
+        ArrayList<Integer> temp;
         do{
             zahl = (long) (Math.random() * (max-min) + min);
-        }while(zahl%5==0||zahl==1);
-
+        }while(!(zahl%2!=0&&zahl%5!=0));
+        erstezahl = zahl;
     }
 
     private ArrayList<Integer> zahlzuziffern(long z){
@@ -499,6 +445,19 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
         while(!temp.isEmpty()){
             ziffernboxen.add(temp.pop());
         }
+    }
+
+    private void restart(){
+        zahl = erstezahl;
+        zahlaktualisieren();
+        moves = 0;
+        timestart = currentTimeMillis();
+    }
+
+    private void undo(){
+        zahl = letztezahl;
+        zahlaktualisieren();
+        moves-=2;
     }
 
     private String gettime(long t){
@@ -535,5 +494,26 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
         }
 
         return rueckgabe;
+    }
+
+    private void win(){
+        timeend = currentTimeMillis();
+        time = (timeend-timestart)/1000;
+
+        String zeit = gettime(time);
+
+        timetv.setText(zeit);
+        movestv.setText(String.format(Locale.ENGLISH, "%d", moves));
+
+        if(prefs.getLong(keytime_tgt, 0)>time||prefs.getLong(keytime_tgt, 0)==0){
+            prefs.edit().putLong(keytime_tgt, time).apply();
+            besttimetv.setText(zeit);
+        }
+        if(prefs.getInt(keymoves_tgt, 0)>moves||prefs.getInt(keymoves_tgt, 0)==0){
+            prefs.edit().putInt(keymoves_tgt, moves).apply();
+            bestmovestv.setText(String.format(Locale.ENGLISH, "%d", moves));
+        }
+
+        winpopup.show();
     }
 }

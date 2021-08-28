@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.brusselschoice">
+    package="de.doim.brusselschoice">
 
     <application
         android:allowBackup="true"
@@ -9,27 +9,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BrusselsChoice">
-        <activity android:name=".Pay"></activity>
+        <activity android:name="de.doim.brusselschoice.Pay"></activity>
         <activity
-            android:name=".Tutorial"
+            android:name="de.doim.brusselschoice.Tutorial"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".levelselect"
+            android:name="de.doim.brusselschoice.levelselect"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".TheGoodThings"
+            android:name="de.doim.brusselschoice.TheGoodThings"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FromTo"
+            android:name="de.doim.brusselschoice.FromTo"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DownToOne"
+            android:name="de.doim.brusselschoice.DownToOne"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Credits"
+            android:name="de.doim.brusselschoice.Credits"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name="de.doim.brusselschoice.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>

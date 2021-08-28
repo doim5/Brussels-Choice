@@ -1,4 +1,4 @@
-package com.example.brusselschoice;
+package de.doim.brusselschoice;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,10 +6,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.brusselschoice.databinding.ActivityLevelselectBinding;
+import de.doim.brusselschoice.databinding.ActivityLevelselectBinding;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public class levelselect extends AppCompatActivity implements View.OnClickListener {

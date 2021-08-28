@@ -123,6 +123,27 @@
             android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/besttimetv" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/undobtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="UNDO"
+        app:layout_constraintBottom_toTopOf="@+id/container"
+        app:layout_constraintEnd_toEndOf="@+id/thirdbtn"
+        app:layout_constraintStart_toStartOf="@+id/thirdbtn" />
+
+    <Button
+        android:id="@+id/restartcurrentbtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="RESTART"
+        app:layout_constraintBottom_toTopOf="@+id/container"
+        app:layout_constraintEnd_toEndOf="@+id/triplebtn"
+        app:layout_constraintStart_toStartOf="@+id/triplebtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -53,7 +53,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5309"
-                            android:textSize="23dp" />
+                            android:textSize="20dp" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -205,7 +205,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:lineSpacingMultiplier="0.6"
-                            android:text="\n-\n"
+                            android:text="14\n-\n51"
                             android:textSize="25dp" />
                     </LinearLayout>
 
@@ -324,60 +324,6 @@
                             android:textSize="23dp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btn20"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:lineSpacingMultiplier="0.6"
-                            android:text="867\n-\n5309"
-                            android:textSize="23dp" />
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <Button
-                            android:id="@+id/btn21"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:lineSpacingMultiplier="0.6"
-                            android:text="\n-\n"
-                            android:textSize="25dp" />
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <Button
-                            android:id="@+id/btn22"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:lineSpacingMultiplier="0.6"
-                            android:text="\n-\n"
-                            android:textSize="25dp" />
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <Button
-                            android:id="@+id/btn23"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:lineSpacingMultiplier="0.6"
-                            android:text="\n-\n"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
                 </LinearLayout>
             </ScrollView>
 
@@ -488,6 +434,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/currentbesttv" />
+
+            <Button
+                android:id="@+id/undobtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="UNDO"
+                app:layout_constraintBottom_toTopOf="@+id/container"
+                app:layout_constraintEnd_toEndOf="@+id/halfebtn"
+                app:layout_constraintStart_toStartOf="@+id/halfebtn" />
+
+            <Button
+                android:id="@+id/restartcurrentbtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="RESTART"
+                app:layout_constraintBottom_toTopOf="@+id/container"
+                app:layout_constraintEnd_toEndOf="@+id/doublebtn"
+                app:layout_constraintStart_toStartOf="@+id/doublebtn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

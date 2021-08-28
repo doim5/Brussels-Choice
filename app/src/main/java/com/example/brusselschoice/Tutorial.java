@@ -165,6 +165,8 @@ public class Tutorial extends AppCompatActivity implements View.OnClickListener{
 
             dialogbuilder1.setView(startpopupview);
             startpopup = dialogbuilder1.create();
+            startpopup.setCancelable(false);
+            startpopup.setCanceledOnTouchOutside(false);
     }
 
     public void onClick(View v) {

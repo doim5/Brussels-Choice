@@ -43,7 +43,7 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
     String keymoves_tgt, keytime_tgt;
 
     //attribute
-    long zahl;
+    long zahl, erstezahl, letztezahl;
     int orange;
     int moves;
 
@@ -52,7 +52,7 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
     //LinearLayout oldnumbercontainer;
     ArrayList<Integer> ziffern;
     ArrayList<TextView> ziffernboxen;
-    Button doublebtn, halfebtn;
+    Button doublebtn, halfebtn, restartcurrentbtn, undobtn;
     TextView currentbesttv, besttimetv, bestmovestv;
 
     //snackbar
@@ -106,9 +106,13 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
 
         doublebtn = binding.triplebtn;
         halfebtn = binding.thirdbtn;
+        restartcurrentbtn = binding.restartcurrentbtn;
+        undobtn = binding.undobtn;
 
         doublebtn.setOnClickListener(this);
         halfebtn.setOnClickListener(this);
+        restartcurrentbtn.setOnClickListener(this);
+        undobtn.setOnClickListener(this);
 
         currentbesttv = binding.currentbesttv;
         besttimetv = binding.besttimetv;
@@ -145,6 +149,8 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
 
         dialogbuilder1.setView(startpopupview);
         startpopup = dialogbuilder1.create();
+        startpopup.setCanceledOnTouchOutside(false);
+        startpopup.setCancelable(false);
 
         //winpopup
         dialogbuilder2 = new AlertDialog.Builder(this);
@@ -164,6 +170,8 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
 
         dialogbuilder2.setView(winpopupview);
         winpopup = dialogbuilder2.create();
+        winpopup.setCancelable(false);
+        winpopup.setCanceledOnTouchOutside(false);
 
         startpopup.show();
     }
@@ -173,6 +181,12 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
             verdoppeln();
         }else if(v==halfebtn){
             halbieren();
+        }
+        else if(v==restartcurrentbtn){
+            restart();
+        }
+        else if(v==undobtn){
+            undo();
         }
         else if(v==startbtn){
             moves = -1;
@@ -308,6 +322,7 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
     }
 
     private void verdoppeln(){
+        letztezahl = zahl;
         long subzahl = getselection();
         ArrayList<Integer> neueziffern;
 
@@ -332,6 +347,7 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
     }
 
     private void halbieren(){
+        letztezahl = zahl;
         long subzahl = getselection();
         if(selection.isEmpty()){
             if(zahl%3==0){
@@ -397,7 +413,7 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
         do{
             zahl = (long) (Math.random() * (max-min) + min);
         }while(!(zahl%2!=0&&zahl%5!=0));
-
+        erstezahl = zahl;
     }
 
     private ArrayList<Integer> zahlzuziffern(long z){
@@ -429,6 +445,19 @@ public class TheGoodThings extends AppCompatActivity implements View.OnClickList
         while(!temp.isEmpty()){
             ziffernboxen.add(temp.pop());
         }
+    }
+
+    private void restart(){
+        zahl = erstezahl;
+        zahlaktualisieren();
+        moves = 0;
+        timestart = currentTimeMillis();
+    }
+
+    private void undo(){
+        zahl = letztezahl;
+        zahlaktualisieren();
+        moves-=2;
     }
 
     private String gettime(long t){
